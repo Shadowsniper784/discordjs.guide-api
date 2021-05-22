@@ -1,38 +1,20 @@
+function format(res, type, text) {
+	res.format({
+		type: function() {
+			res.send(text);
+		}
+	});
+}
+function no(res, what) {
+	format(res, 'text/html', `<h>No ${what} specified</h>`);
+}
+
 var express = require('express');
 var app = express();
 app.get('/api', (req, res, next) => {
-	const a = req.query.a || 2;
-	const text = req.query.q;
-	if (text) run(a);
-	else no('q');
-	function no(what) {
-		return res.format({
-			'text/html': function() {
-				res.send(`<h>No ${what} specified</h>`);
-			}
-		});
-	}
-	function run(amount) {
-	  	let r = [];
-		const lext = text.toLowerCase();
-		var docs = require('./guide.json');
-		var result = docs.file.filter(function(item) {
-			const title = item.title.toLowerCase();
-			var e = item.children.find(it => {
-				return it.toLowerCase().includes(lext);
-			});
-			return title.includes(lext) || lext.includes(title) || e;
-		});
-		r.push(result);
-		r.length = amount;
-		res.format({
-			'application/json': function() {
-				res.send(r);
-			}
-		});
-	}
+	const run = require('./routes/search.js');
+	run(req, res, no, format);
 });
-
 app.get('/', (req, res, next) => {
 	res.redirect('/home');
 });
