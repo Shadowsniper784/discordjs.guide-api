@@ -1,8 +1,6 @@
 var express = require('express');
 var app = express();
 app.get('/api', (req, res, next) => {
-	const path = require('path');
-	const fs = require('fs');
 	const text = req.query.q;
 	let r = [];
 	const lext = text.toLowerCase();
