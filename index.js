@@ -1,19 +1,16 @@
-function format(res, type, text) {
-	res.format({
-		type: function() {
-			res.send(text);
-		}
-	});
-}
+
 function no(res, what) {
-	format(res, 'text/html', `<h>No ${what} specified</h>`);
+		res.format({
+		'text/html': function() {
+			res.send(`<h>No ${what} specified</h>`);
+		}})
 }
 
 var express = require('express');
 var app = express();
 app.get('/api', (req, res, next) => {
 	const run = require('./routes/search.js');
-	run(req, res, no, format);
+	run(req, res, no);
 });
 app.get('/', (req, res, next) => {
 	res.redirect('/home');

@@ -1,4 +1,4 @@
-module.exports = (req, res, no, format) => {
+module.exports = (req, res, no) => {
 	const a = req.query.a || req.query.amount || 2;
 	const text = req.query.q || req.query.search;
 	let r = [];
@@ -17,6 +17,9 @@ module.exports = (req, res, no, format) => {
 		});
 		r = result;
 		r.length = amount;
-		format(res, 'application/json', r[0] ? r : 'No result found');
+		res.format({
+		  'application/json': function() {
+			res.send(r[0] ? r : 'No result found')
+		}})
 	}
 };
